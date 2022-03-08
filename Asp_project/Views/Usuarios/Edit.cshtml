@@ -1,0 +1,291 @@
+﻿ @model Asp_project.ViewType.UsuarioType
+@{
+	ViewData["Title"] = "Atualizar Dados";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Atualizar Dados</h1>
+
+<hr />
+<section>
+	<div class="container-fluid">
+		<div class="card">
+			<div class="card-body">
+				@using (Html.BeginForm("Edit", "Usuarios", FormMethod.Post, new { @class = "form-horizontal", @enctype = "multipart/form-data" }))
+				{
+					@Html.HiddenFor(x => x.foto);
+					@Html.HiddenFor(x => x.id_usuario);
+					@Html.HiddenFor(x => x.senha);
+					@Html.HiddenFor(x => x.confirmarSenha);
+
+					var foto = "";
+
+					if (@Model.foto != null && @Model.foto != "") foto = Url.Content("~/ImageProfile/" + @Model.foto);
+					else foto = Url.Content("~/Images_System/default_profile.jpg");
+
+					<div class="form-group row">
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.nome, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.nome, new { @class = "form-control", @placeholder = "Digite seu nome completo" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.nome)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.sobrenome, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.sobrenome, new { @class = "form-control", @placeholder = "Digite seu sobrenome" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.sobrenome)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.cpf, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.cpf, new { @class = "form-control cpf", @placeholder = "Digite seu CPF" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.cpf)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.telefone, new { @class = "col-sm-6 control-label" })
+							@Html.TextBoxFor(x => x.telefone, new { @class = "form-control telefone", @placeholder = "Digite o seu telefone" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.telefone)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.celular, new { @class = "col-sm-6 control-label" })
+							@Html.TextBoxFor(x => x.celular, new { @class = "form-control celular", @placeholder = "Digite o seu celular" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.celular)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.email, new { @class = "col-sm-6 control-label" })
+							@Html.TextBoxFor(x => x.email, new { @class = "form-control", @placeholder = "Digite o seu celular", @type = "email" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.email)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.foto, new { @class = "col-sm-12 control-label" })
+							<label id="button-add-photo" class="col-sm-3" for="ProfileImage"><i class="icon-camera-retro icon-4x"></i></label>
+							<input class="form-control-file" asp-for="ProfileImage" />
+							<img id="photo" src="@foto" />
+						</div>
+
+					</div>
+
+					<br />
+
+					<div class="form-group row">
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.cep, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.Endereco.cep, new { @class = "form-control cep", @placeholder = "Digite seu CEP" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.nome)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.logradouro, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.Endereco.logradouro, new { @class = "form-control", @placeholder = "Informe um complemento" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.logradouro)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.complemento, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.Endereco.complemento, new { @class = "form-control", @placeholder = "Informe seu logradouro" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.complemento)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.Numero, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.Endereco.Numero, new { @class = "form-control", @placeholder = "Digite seu Número" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.Numero)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.uf, new { @class = "col-sm-6 control-label" })
+							<select asp-for="@Model.Endereco.uf" class="form-control select2" id="Endereco_uf" name="Endereco.uf"></select>
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.uf)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.Cidade, new { @class = "col-sm-6 control-label" })
+							<select asp-for="@Model.Endereco.Cidade" class="form-control select2" id="Endereco_Cidade" name="Endereco.Cidade"></select>
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.Cidade)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.bairro, new { @class = "col-sm-6 control-label" })
+							@Html.TextBoxFor(x => x.Endereco.bairro, new { @class = "form-control", @placeholder = "Informe o seu bairro" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.bairro)</span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<input type="submit" value="Atualizar" class="btn btn-success" />
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	#button-add-photo {
+		cursor: pointer;
+	}
+
+	#ProfileImage {
+		opacity: 0;
+		position: absolute;
+		z-index: -1;
+	}
+
+	img {
+		width: 160px;
+		height: 160px;
+		margin-left: 20px;
+	}
+
+	.select2 {
+		width: 100% !important;
+	}
+
+	.select2-container .select2-selection--single {
+		height: 38px !important;
+	}
+
+	.select2-container--default .select2-selection--single .select2-selection__rendered {
+		line-height: 34px;
+	}
+</style>
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+	<script type="text/javascript">
+
+		var cidade = "";
+		$("#ProfileImage").change(function () {
+			console.log(this)
+			readURL(this);
+
+		})
+
+		$.ajax({
+			type: 'Get',
+			url: "https://servicodados.ibge.gov.br/api/v1/localidades/estados",
+
+			dataType: 'json',
+
+			data: { id: $("#Endereco_uf").val() },
+
+			success: function (states) {
+
+				$("#Endereco_uf").append('<option value> Selecione...</option>');
+				$.each(states, function (i, state) {
+					$("#Endereco_uf").append('<option value="' + state.sigla + '">' +
+						state.nome + '</option>');
+
+				});
+
+				getCidadeEstado()
+			},
+			error: function (ex) {
+				$("#Endereco_uf").append('<option value> Selecione...</option>');
+			}
+		});
+
+		function readURL(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+
+				reader.onload = function (e) {
+					$('#photo').attr('src', e.target.result);
+				}
+
+				reader.readAsDataURL(input.files[0]);
+			}
+		}
+
+		function getCidadeEstado() {
+			$.ajax({
+                type: 'GET',
+                url: "@Url.Action("GetCidade", "Usuarios")" + "?id=" + $("#id_usuario").val(),
+
+                dataType: 'json',
+
+				data: { id: $("#id_usuario").val() },
+
+				success: function (states) {
+					cidade = states[0].cidade;
+					$("#Endereco_uf").val(states[0].uf).change();
+
+                },
+                error: function (ex) {
+                    $("#id_cidade").append('<option value> Selecione...</option>');
+                    //alert('Failed to retrieve states.' + ex);
+                }
+            });
+		}
+
+		/*$("#Endereco_Cidade").change(function () {
+			console.log("Mostrando a cidade");
+			console.log($("#Endereco_Cidade").val());
+		})*/
+
+		$("#Endereco_uf").change(function () {			
+			listarCidades();
+		})
+
+		function listarCidades() {
+
+			if ($("#Endereco_uf").val() != "") {
+				$("#Endereco_Cidade option").remove();
+				$("#Endereco_Cidade").removeAttr('disabled');
+
+				$.ajax({
+					type: 'Get',
+					url: "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + $("#Endereco_uf").val() + "/distritos",
+
+					dataType: 'json',
+
+					data: { id: $("#Endereco_Cidade").val() },
+
+					success: function (states) {
+						states.sort(function (a, b) {
+							if (a.nome > b.nome) {
+								return 1;
+							}
+							if (a.nome < b.nome) {
+								return -1;
+							}
+
+							return 0;
+						});
+
+						$("#Endereco_Cidade").append('<option value=""> Selecione...</option>');
+						$.each(states, function (i, state) {
+							$("#Endereco_Cidade").append('<option value="' + state.nome + '">' +
+								state.nome + '</option>');
+							// here we are adding option for States
+
+						});
+
+						if (cidade != "") {
+							$("#Endereco_Cidade").val(cidade).change();
+							cidade = "";
+						}
+
+					},
+					error: function (ex) {
+						$("#Endereco_Cidade").append('<option value=""> Selecione...</option>');
+						//alert('Failed to retrieve states.' + ex);
+					}
+				});
+			} else {
+				$("#Endereco_Cidade option").remove();
+				$("#Endereco_Cidade").append('<option value=""> Selecione...</option>');
+				$("#Endereco_Cidade").attr('disabled', 'disabled');
+			}
+
+			return;
+		}
+	</script>
+}

@@ -1,0 +1,172 @@
+﻿@model Asp_project.ViewType.ProdutoType
+@{
+	ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Produto</h4>
+<hr />
+
+<section>
+	<div class="container-fluid">
+		<div class="card">
+			<div class="card-body">
+				@using (Html.BeginForm("Create", "Produtos", FormMethod.Post, new { @class = "form-horizontal", @enctype = "multipart/form-data" }))
+				{
+					var foto = Url.Content("~/Images_System/default_shop.png");
+					@Html.HiddenFor(x => x.Lid_loja);
+
+					<div class="form-group row">
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.nome_produto, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.nome_produto, new { @class = "form-control", @placeholder = "Digite o nome do produto" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.nome_produto)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Cid_categoria, new { @class = "col-sm-6 form-label" })
+							<select asp-for="Cid_categoria" class="form-control select2" asp-items="ViewBag.Cid_categoria"></select>
+						</div>
+
+						<div class="col-sm-12">
+							@Html.LabelFor(x => x.descricao_produto, new { @class = "col-sm-6 form-label" })
+							@Html.TextAreaFor(x => x.descricao_produto, new { @class = "form-control", @placeholder = "Descreva sobre esse produto" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.descricao_produto)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.valor, new { @class = "col-sm-6 control-label" })
+							@Html.TextBoxFor(x => x.valor, new { @class = "form-control valor" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.valor)</span>
+						</div>
+
+						<div class="col-sm-6">
+							<label id="button-add-photo" class="col-sm-3" for="ImagensProdutos"><i class="icon-camera-retro icon-4x"></i></label>
+							<input class="form-control-file" asp-for="ImagensProdutos" multiple/>
+
+							<ul id="photo">
+							</ul>
+							
+						</div>
+
+					</div>
+
+					<br />
+
+					<div class="form-group">
+						<input type="submit" value="Cadastrar" class="btn btn-success" />
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</section>
+<style>
+	#button-add-photo {
+		cursor: pointer;
+	}
+
+	.red-color {
+		color: red;
+		cursor: pointer;
+	}
+
+	.spacing {
+		margin-right: 5px;
+	}
+
+	.spacing-more {
+		margin-right: 15px;
+	}
+
+	#ImagensProdutos {
+		opacity: 0;
+		position: absolute;
+		z-index: -1;
+	}
+
+	img {
+		width: 90px;
+		height: 90px;
+		margin-left: 20px;
+	}
+
+	.select2 {
+		width: 100% !important;
+	}
+
+	.select2-container .select2-selection--single {
+		height: 38px !important;
+	}
+
+	.select2-container--default .select2-selection--single .select2-selection__rendered {
+		line-height: 34px;
+	}
+</style>
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	<script>
+		$('#photo').hide();
+
+		function readURL(input) {
+			
+			if (input.files && input.files[0]) {
+
+				for (let i = 0; i < input.files.length; i++) {
+					let reader = new FileReader();
+					let id;
+
+					if ($('#photo li').length == 0) {
+						id = i
+					} else {
+						id = i > 0 ? getId(i) : getId(null)
+					}
+
+					reader.onload = function (e) {
+						$('#photo').append(`<li id="${id}" class="row spacing-more">
+												<i id="remover_imagem" onclick="removerImagem(${id})" class="icon-remove icon-large red-color"></i><br />
+												<img src="${e.target.result}" />
+											</li>`)
+					}
+
+					reader.readAsDataURL(input.files[i])
+				}
+
+			}
+
+			$('#photo').show()
+			console.log("Mostrando a quantidade de lis " + $('#photo li').length)
+		}
+
+		function getId(compementId) {
+			let Id = 0;
+
+			for (let li of $('#photo li')) {
+				if (li.id > Id) {
+					Id = li.id
+				}
+			}
+
+			let novoId = compementId != null ? parseInt(Id) + 1 + compementId : parseInt(Id) + 1;
+			return novoId
+		}
+
+		function removerImagem(i) {
+			$("#" + i).remove();
+		}
+
+		$("#ImagensProdutos").change(function () {
+			console.log("mostrando input antes do if")
+			console.log(this)
+			readURL(this);
+
+		})
+
+	</script>
+}

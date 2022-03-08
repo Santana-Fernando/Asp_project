@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - Asp_project</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css" rel="stylesheet" />
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	<link rel="stylesheet" href="~/css/site.css" />
+
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+			<div class="container">
+				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Asp_project</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+					<ul class="navbar-nav flex-grow-1">
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+						</li> 
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<div class="container">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
+
+	<footer class="border-top footer text-muted">
+		<div class="container">
+			&copy; 2021 - Asp_project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+		</div>
+	</footer>
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/lib/jquery-mask-plugin/src/jquery.mask.js" type="text/javascript" asp-append-version="true"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.js"></script>
+
+	<script type="text/javascript">
+		$(".select2").select2();
+		$(".cnpj").mask("99.999.999/9999-99");
+		$(".cpf").mask("999.999.999-99");
+		$(".telefone").mask("(99) 9999-9999");
+		$(".celular").mask("(99) 99999-9999");
+		$(".cep").mask("99999-999");
+		$(".valor").mask('#.##0,00', { reverse: true })
+	</script>3
+
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+			//Quando o campo cep perde o foco.
+			$("#Endereco_cep").blur(function (e) {
+
+				//Nova variável "cep" somente com dígitos.
+				var cep = $(this).val().replace(/\D/g, '');
+
+				//Verifica se campo cep possui valor informado.
+				if (cep != "") {
+
+					//Consulta o webservice viacep.com.br/
+
+					$.getJSON("//viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+
+						if (!("erro" in dados)) {
+							$('.lds-ring').show();
+
+							$("#Endereco_logradouro").val(dados.logradouro);
+							$("#Endereco_bairro").val(dados.bairro);
+
+							if (dados.uf) {
+								$("#Endereco_uf option").remove();
+								$.ajax({
+									type: 'Get',
+									url: "https://servicodados.ibge.gov.br/api/v1/localidades/estados",
+
+									dataType: 'json',
+
+									data: { id: $("#Endereco_uf").val() },
+
+									success: function (states) {
+
+										states.sort(function (a, b) {
+											if (a.nome > b.nome) {
+												return 1;
+											}
+											if (a.nome < b.nome) {
+												return -1;
+											}
+
+											return 0;
+										});
+
+										$("#Endereco_uf").append('<option value> Selecione...</option>');
+										$.each(states, function (i, state) {
+											if (state.sigla == dados.uf) {
+
+												$("#Endereco_uf").append('<option value="' + state.sigla + '" selected>' +
+													state.nome + '</option>');
+
+											} else {
+												$("#Endereco_uf").append('<option value="' + state.sigla + '">' +
+													state.nome + '</option>');
+											}
+											
+										});
+									},
+									error: function (ex) {
+										$("#Endereco_uf").append('<option value=""> Selecione...</option>');
+										//alert('Failed to retrieve states.' + ex);
+									}
+								});
+							}
+
+							if (document.getElementById("Endereco_Cidade").options.length != 0) {
+								$("#Endereco_Cidade option").remove();
+								$("#Endereco_Cidade").removeAttr('disabled');
+								console.log("ja tem cidade " + document.getElementById("Endereco_Cidade").options.length)
+								$("#Endereco_Cidade").val(dados.localidade).change();
+
+							} else {
+
+								$("#Endereco_Cidade option").remove();
+								$("#Endereco_Cidade").removeAttr('disabled');
+
+								console.log("não tem cidade " + document.getElementById("Endereco_Cidade").options.length)
+
+								$.ajax({
+									type: 'Get',
+									url: "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + dados.uf + "/distritos",
+
+									dataType: 'json',
+
+									success: function (states) {
+										states.sort(function (a, b) {
+											if (a.nome > b.nome) {
+												return 1;
+											}
+											if (a.nome < b.nome) {
+												return -1;
+											}
+
+											return 0;
+										});
+
+										$("#Endereco_Cidade").append('<option value=""> Selecione...</option>');
+										$.each(states, function (i, state) {
+											$("#Endereco_Cidade").append('<option value="' + state.nome + '">' +
+												state.nome + '</option>');
+											// here we are adding option for States
+
+										});
+
+										$("#Endereco_Cidade").val(dados.localidade).change();
+
+									},
+									error: function (ex) {
+										console.log("deu errado");
+										$("#Endereco_Cidade").append('<option value=""> Selecione...</option>');
+										//alert('Failed to retrieve states.' + ex);
+									}
+								});
+							}
+							$('.lds-ring').hide();
+							
+						}
+					});
+				}
+			});
+		});
+
+	</script>
+	<!--
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>-->
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@RenderSection("Scripts", required: false)
+</body>
+</html>

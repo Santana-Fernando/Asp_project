@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Asp_project.Models.Usuario>
+
+@{
+	ViewData["Title"] = "Lista de Usuário";
+}
+
+<h1>Lista de Usuário</h1>
+
+<section>
+	<div class="container-fluid">
+		<div class="card">
+			<div class="card-body">
+
+				<p>
+					<a asp-action="Create">Create New</a>
+				</p>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>
+								Foto do perfil
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.nome)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.sobrenome)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.cpf)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.telefone)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.celular)
+							</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							string foto = "";
+
+							if (item.foto != null && item.foto != "") foto = Url.Content("~/ImageProfile/" + item.foto);
+							else foto = Url.Content("~/Images_System/default_profile.jpg");
+
+							<tr id="tabela_usuario">
+								<td>
+									<img id="photo" src="@foto"  />
+									@Html.HiddenFor(modelItem => item.Loja.id_loja)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.nome)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.sobrenome)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.cpf)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.telefone)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.celular)
+								</td>
+								<td>
+									<a asp-action="Edit" asp-route-id="@item.id_usuario">Edit</a> |
+									<a asp-action="Details" asp-route-id="@item.id_usuario">Details</a> |
+									<a asp-action="Delete" asp-route-id="@item.id_usuario">Delete</a> |
+									@if (item.Loja != null)
+									{
+										<a id="ListarLoja" asp-controller="Lojas" asp-action="Details" asp-route-id="@item.Loja.id_loja">Visualizar Loja</a>
+									}
+									else
+									{
+										<a id="NovaLoja" asp-controller="Lojas" asp-action="Create" asp-route-id="@item.id_usuario">Cadastrar Loja</a>
+									}
+
+
+								</td>
+
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	
+	img {
+		width: 60px;
+		height: 60px;
+		margin-left: 20px;
+		border-radius: 50%;
+	}
+</style>
+
+@section Scripts {
+	<script type="text/javascript">
+
+		$("#tabela_usuario").change(function () {
+			alert
+		})
+	</script>
+}

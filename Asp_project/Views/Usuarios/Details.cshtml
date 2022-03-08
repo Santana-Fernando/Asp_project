@@ -1,0 +1,117 @@
+﻿@model Asp_project.Models.Usuario
+
+@{
+	ViewData["Title"] = "Detalhes da conta";
+}
+
+<h1>Detalhes da conta</h1>
+
+<section>
+	<div class="container-fluid">
+		<div class="card">
+			<div class="card-body">
+				<div class="form-group row">
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						@Html.LabelFor(x => x.foto, new { @class = "col-sm-12 control-label" })
+						@if (@Model.foto != null && Model.foto != "")
+						{
+							string foto = Url.Content("~/ImageProfile/" + @Model.foto);
+							<img id="photo" src="@foto" />
+						}
+						else
+						{
+							string foto = Url.Content("~/Images_System/default_profile.jpg");
+							<img id="photo" src="@foto" />
+						}
+					</div>
+					<div class="form-group col-md-6 col-sm-6 col-xs-12">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							@Html.LabelFor(x => x.nome, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.nome, new { @class = "form-control", @placeholder = "Digite seu nome completo", @readonly = true })
+						</div>
+
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							@Html.LabelFor(x => x.sobrenome, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.sobrenome, new { @class = "form-control", @placeholder = "Digite seu sobrenome", @readonly = true })
+						</div>
+
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							@Html.LabelFor(x => x.cpf, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.cpf, new { @class = "form-control cpf", @placeholder = "Digite seu CPF", @readonly = true })
+						</div>
+					</div>
+
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						@Html.LabelFor(x => x.telefone, new { @class = "col-sm-6 control-label" })
+						@Html.TextBoxFor(x => x.telefone, new { @class = "form-control telefone", @placeholder = "Digite o seu telefone", @readonly = true })
+					</div>
+
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						@Html.LabelFor(x => x.celular, new { @class = "col-sm-6 control-label" })
+						@Html.TextBoxFor(x => x.celular, new { @class = "form-control celular", @placeholder = "Digite o seu celular", @readonly = true })
+					</div>
+
+				</div>
+
+				<br />
+
+				<div class="form-group row">
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						@Html.LabelFor(x => x.Endereco.cep, new { @class = "col-sm-6 form-label" })
+						@Html.TextBoxFor(x => x.Endereco.cep, new { @class = "form-control cep", @placeholder = "Digite seu CEP", @readonly = true })
+					</div>
+
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						@Html.LabelFor(x => x.Endereco.logradouro, new { @class = "col-sm-6 form-label" })
+						@Html.TextBoxFor(x => x.Endereco.logradouro, new { @class = "form-control", @placeholder = "Informe um complemento", @readonly = true })
+					</div>
+
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						@Html.LabelFor(x => x.Endereco.complemento, new { @class = "col-sm-6 form-label" })
+						@Html.TextBoxFor(x => x.Endereco.complemento, new { @class = "form-control", @placeholder = "Informe seu logradouro", @readonly = true })
+					</div>
+
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						@Html.LabelFor(x => x.Endereco.Numero, new { @class = "col-sm-6 form-label" })
+						@Html.TextBoxFor(x => x.Endereco.Numero, new { @class = "form-control", @placeholder = "Digite seu Número", @readonly = true })
+					</div>
+
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						@Html.LabelFor(x => x.Endereco.Cidade, new { @class = "col-sm-6 control-label" })
+						@Html.TextBoxFor(x => x.Endereco.Cidade, new { @class = "form-control", @placeholder = "Informe a sua cidade", @readonly = true })
+					</div>
+
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						@Html.LabelFor(x => x.Endereco.uf, new { @class = "col-sm-6 control-label" })
+						@Html.TextBoxFor(x => x.Endereco.uf, new { @class = "form-control", @placeholder = "Informe a sua uf", @readonly = true })
+					</div>
+
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						@Html.LabelFor(x => x.Endereco.bairro, new { @class = "col-sm-6 control-label" })
+						@Html.TextBoxFor(x => x.Endereco.bairro, new { @class = "form-control", @placeholder = "Informe o seu bairro", @readonly = true })
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-6 col-xs-12">
+					<a asp-action="Edit" asp-route-id="@Model.id_usuario">
+						<input type="submit" value="Editar" class="btn btn-warning col-md-3" />
+					</a>
+					<a asp-action="Index">
+						<input type="button" value="Voltar" class="btn btn-danger col-md-3" />
+					</a>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+</section>
+<style>
+
+	img {
+		width: 200px;
+		height: 200px;
+		margin-left: 20px;
+		border-radius: 50%;
+	}
+</style>
+

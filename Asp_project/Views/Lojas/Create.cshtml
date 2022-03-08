@@ -1,0 +1,372 @@
+﻿@model Asp_project.ViewType.LojaType
+@{
+	ViewData["Title"] = "Cadastro";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Cadastro</h1>
+
+<hr />
+<section>
+	<div class="container-fluid">
+		<div class="card">
+			<div class="card-body">
+				@using (Html.BeginForm("Create", "Lojas", FormMethod.Post, new { @class = "form-horizontal", @enctype = "multipart/form-data" }))
+				{
+					var foto = Url.Content("~/Images_System/default_shop.png");
+					@Html.HiddenFor(x => x.Uid_usuario);
+
+					<div class="form-group row">
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.nome_loja, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.nome_loja, new { @class = "form-control", @placeholder = "Digite seu nome completo" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.nome_loja)</span>
+						</div>
+
+						<div class="col-sm-3">
+							<label>Propietário</label>
+							<select class="form-control" id="tipoPessoa" name="tipoPessoa">
+								<option value="F">Pessoa Física</option>
+								<option value="J">Pessoa Jurídica</option>
+							</select>
+						</div>
+
+						<div class="col-sm-3">
+							@Html.LabelFor(x => x.cpf_cnpj, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.cpf_cnpj, new { @class = "form-control cpf", @placeholder = "Digite seu CPF ou CNPJ" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.cpf_cnpj)</span>
+						</div>
+
+						<div class="col-sm-12">
+							@Html.LabelFor(x => x.descicao, new { @class = "col-sm-6 form-label" })
+							@Html.TextAreaFor(x => x.descicao, new { @class = "form-control", @placeholder = "Digite seu sobrenome" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.descicao)</span>
+						</div>
+
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.telefone, new { @class = "col-sm-6 control-label" })
+							@Html.TextBoxFor(x => x.telefone, new { @class = "form-control telefone", @placeholder = "Digite o telefone da sua loja" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.telefone)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.celular, new { @class = "col-sm-6 control-label" })
+							@Html.TextBoxFor(x => x.celular, new { @class = "form-control celular", @placeholder = "Digite o celular da sua loja" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.celular)</span>
+						</div>
+
+						<div class="col-sm-12">
+							@Html.LabelFor(x => x.dias_e_horas_de_funcionamento, new { @class = "col-sm-6 control-label" })
+
+							<div class="col-sm-6 row">
+								<select id="dias" class="form-control col-sm-6 spacing-more">
+									<option value="Segunda-Feira">Segunda-Feira</option>
+									<option value="Terça-Feira">Terça-Feira</option>
+									<option value="Quarta-Feira">Quarta-Feira</option>
+									<option value="Quarta-Feira">Quinta-Feira</option>
+									<option value="Sexta-Feira">Sexta-Feira</option>
+									<option value="Sábado">Sábado</option>
+									<option value="Domingo">Domingo</option>
+								</select>
+
+								<input type="text" id="horarioAbertura" class="form-control col-sm-2 spacing" placeholder="De" />
+								<input type="text" id="horarioFechamento" class="form-control col-sm-2" placeholder="Até" />
+							</div>
+							@Html.HiddenFor(x => x.dias_e_horas_de_funcionamento)
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.dias_e_horas_de_funcionamento)</span>
+							<br />
+							<ul id="horarios">
+
+							</ul>
+
+							<div class="form-group">
+								<input type="button" value="Adicionar dia e horário" id="add_horario" class="btn btn-success" />
+							</div>
+
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.fotoLoja, new { @class = "col-sm-12 control-label" })
+							<label id="button-add-photo" class="col-sm-3" for="ShopImage"><i class="icon-camera-retro icon-4x"></i></label>
+							<input class="form-control-file" asp-for="ShopImage" />
+							<img id="photo" src="@foto" />
+						</div>
+
+					</div>
+
+					<br />
+
+					<div class="form-group row">
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.cep, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.Endereco.cep, new { @class = "form-control cep", @placeholder = "Digite seu CEP" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.cep)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.logradouro, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.Endereco.logradouro, new { @class = "form-control", @placeholder = "Informe um complemento" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.logradouro)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.complemento, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.Endereco.complemento, new { @class = "form-control", @placeholder = "Informe seu logradouro" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.complemento)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.Numero, new { @class = "col-sm-6 form-label" })
+							@Html.TextBoxFor(x => x.Endereco.Numero, new { @class = "form-control", @placeholder = "Digite seu Número" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.Numero)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.uf, new { @class = "col-sm-6 control-label" })
+							<select asp-for="@Model.Endereco.uf" class="form-control select2" id="Endereco_uf" name="Endereco.uf"></select>
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.uf)</span>
+						</div>
+
+						<div class="col-sm-6">
+							@Html.LabelFor(x => x.Endereco.Cidade, new { @class = "col-sm-6 control-label" })
+							<select asp-for="@Model.Endereco.Cidade" class="form-control select2" id="Endereco_Cidade" name="Endereco.Cidade"></select>
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.Cidade)</span>
+						</div>
+
+						<div class="col-sm-6" style="margin-top: 10px;">
+							@Html.LabelFor(x => x.Endereco.bairro, new { @class = "col-sm-6 control-label" })
+							@Html.TextBoxFor(x => x.Endereco.bairro, new { @class = "form-control", @placeholder = "Informe o seu bairro" })
+							<span class="text-danger">@Html.ValidationMessageFor(x => x.Endereco.bairro)</span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<input type="submit" value="Cadastrar" class="btn btn-success" />
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	#button-add-photo {
+		cursor: pointer;
+	}
+
+	.red-color {
+		color: red;
+		cursor: pointer;
+	}
+
+	.spacing {
+		margin-right: 5px;
+	}
+
+	.spacing-more {
+		margin-right: 15px;
+	}
+	#ShopImage {
+		opacity: 0;
+		position: absolute;
+		z-index: -1;
+	}
+
+	img {
+		width: 90px;
+		height: 90px;
+		margin-left: 20px;
+	}
+
+	.select2 {
+		width: 100% !important;
+	}
+
+	.select2-container .select2-selection--single {
+		height: 38px !important;
+	}
+
+	.select2-container--default .select2-selection--single .select2-selection__rendered {
+		line-height: 34px;
+	}
+</style>
+
+<div>	
+	<a asp-controller="Usuarios" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+	<script type="text/javascript">
+		let horario = [];
+
+		$("#horarioAbertura").mask("99:99");
+		$("#horarioFechamento").mask("99:99");
+
+		$('#tipoPessoa').change(() => {
+			if ($('#tipoPessoa').val() == "F") {
+				$('#cpf_cnpj').removeClass('cnpj');
+				$('#cpf_cnpj').addClass('cpf');
+				$("#cpf_cnpj").mask("999.999.999-99");
+			} else if ($('#tipoPessoa').val() == "J") {
+				$('#cpf_cnpj').removeClass('cpf');
+				$('#cpf_cnpj').addClass('cnpj');
+				$("#cpf_cnpj").mask("99.999.999/9999-99");
+			}
+		})
+
+
+		$('#photo').hide();
+		$("#Endereco_Cidade").attr('disabled', 'disabled');
+
+		function readURL(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+
+				reader.onload = function (e) {
+					$('#photo').attr('src', e.target.result);
+				}
+
+				$('#photo').show()
+
+				reader.readAsDataURL(input.files[0]);
+			}
+		}
+
+		$("#ShopImage").change(function () {
+			console.log(this)
+			readURL(this);
+
+		})
+
+		$.ajax({
+			type: 'Get',
+			url: "https://servicodados.ibge.gov.br/api/v1/localidades/estados",
+
+			dataType: 'json',
+
+			data: { id: $("#Endereco_uf").val() },
+
+			success: function (states) {
+
+				states.sort(function (a, b) {
+					if (a.nome > b.nome) {
+						return 1;
+					}
+					if (a.nome < b.nome) {
+						return -1;
+					}
+
+					return 0;
+				});
+
+				$("#Endereco_uf").append('<option value> Selecione...</option>');
+				$.each(states, function (i, state) {
+					$("#Endereco_uf").append('<option value="' + state.sigla + '">' +
+						state.nome + '</option>');
+				});
+			},
+			error: function (ex) {
+				$("#Endereco_uf").append('<option value=""> Selecione...</option>');
+				//alert('Failed to retrieve states.' + ex);
+			}
+		});
+
+		$("#Endereco_Cidade").change(function () {
+			console.log("Mostrando a cidade");
+			console.log($("#Endereco_Cidade").val());
+		})
+
+		$("#Endereco_uf").change(function () {
+			listarCidades();
+		})
+
+		function listarCidades() {
+
+			if ($("#Endereco_uf").val() != "") {
+				$("#Endereco_Cidade option").remove();
+				$("#Endereco_Cidade").removeAttr('disabled');
+
+				$.ajax({
+					type: 'Get',
+					url: "https://servicodados.ibge.gov.br/api/v1/localidades/estados/" + $("#Endereco_uf").val() + "/distritos",
+
+					dataType: 'json',
+
+					data: { id: $("#Endereco_Cidade").val() },
+
+					success: function (states) {
+						states.sort(function (a, b) {
+							if (a.nome > b.nome) {
+								return 1;
+							}
+							if (a.nome < b.nome) {
+								return -1;
+							}
+
+							return 0;
+						});
+
+						$("#Endereco_Cidade").append('<option value=""> Selecione...</option>');
+						$.each(states, function (i, state) {
+							$("#Endereco_Cidade").append('<option value="' + state.nome + '">' +
+								state.nome + '</option>');
+							// here we are adding option for States
+
+						});
+
+					},
+					error: function (ex) {
+						$("#Endereco_Cidade").append('<option value=""> Selecione...</option>');
+						//alert('Failed to retrieve states.' + ex);
+					}
+				});
+			} else {
+				$("#Endereco_Cidade option").remove();
+				$("#Endereco_Cidade").append('<option value=""> Selecione...</option>');
+				$("#Endereco_Cidade").attr('disabled', 'disabled');
+			}
+		}
+
+		$("#add_horario").click(function () {
+			horario = [];
+
+			let id = $('#horarios li').length;
+			$("#horarios").append(`<li id="${id}" class="col-sm-12 row"><p class="spacing-more">${$("#dias").val()} ${$("#horarioAbertura").val()} - ${$("#horarioFechamento").val()}</p> <i id="remove_horario" onclick="removerHorario(${id})" class="icon-remove icon-large red-color"></i></li>`);
+
+			atualizarDiaHorario()
+						
+		});
+
+		function removerHorario(id) {
+			horario = [];
+
+			$("#" + id).remove();
+			atualizarDiaHorario();
+		}
+
+		function atualizarDiaHorario() {
+			$("#horarios li").each(function (key, value) {
+				var id = $(this).prop("id")
+				let novoHorario = document.getElementById(id).innerText
+
+				horario.push(novoHorario)
+			})
+
+			$("#dias_e_horas_de_funcionamento").val(horario.join(","))
+		}
+
+		if ($("#dias_e_horas_de_funcionamento").val() != "") {
+			let horarios = $("#dias_e_horas_de_funcionamento").val().split(",")
+
+			for (let horario of horarios) {
+				let id = $('#horarios li').length
+				let dia = horario.split(" ")
+
+				$("#horarios").append(`<li id="${id}" class="col-sm-12 row"><p class="spacing-more">${dia[0]} ${dia[1]} - ${dia[3]}</p> <i id="remove_horario" onclick="removerHorario(${id})" class="icon-remove icon-large red-color"></i></li>`);
+			}
+		}
+
+		//$("#dias_e_horas_de_funcionamento").val().split(",")[0].split(" ")
+	</script>
+}
